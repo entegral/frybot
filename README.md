@@ -63,7 +63,6 @@ Frybot can assist you with answering questions about provided code with the `pro
 
 You may also save the response to a file with the `-s` flag. This will save the response to a file named `frybot_response.txt` in your `cwd`.
 
-```bash
 
 ```bash
 frybot prompt -p "How do I find a User record using platformservices?" -t "path/to/file"
