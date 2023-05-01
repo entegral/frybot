@@ -1,6 +1,3 @@
-Prompt: please only respond with file contents: can you please provide a detailed README, written in markdown, for the code i have provided?
-
-Response:
 # Frybot
 
 Frybot is an AI language model that can assist users with answering questions about code in their current working directory (`cwd`). The `cwd` may be a combination of more than one file, but must not exceed the token length for the model you have selected. 
@@ -52,8 +49,10 @@ To use Frybot, you will need to have an OpenAI API key. You can sign up for an A
 
 The `chat` command initializes a chat session with the bot. Type `exit` to exit or press `crtl + c`. You may also say `save this conversation` to save the conversation to a file named `frybot_conversation.txt` in your `cwd`.
 
-```bash
+```sh
+
 frybot chat
+
 ```
 
 ### Prompt
@@ -64,10 +63,11 @@ Frybot can assist you with answering questions about provided code with the `pro
 
 You may also save the response to a file with the `-s` flag. This will save the response to a file named `frybot_response.txt` in your `cwd`.
 
-```bash
 
-```bash
+```sh
+
 frybot prompt -p "How do I find a User record using platformservices?" -t "path/to/file"
+
 ```
 
 The `-p` flag is required and specifies the prompt for the bot to answer. The `-t` flag is optional and specifies the file to provide context to the prompt.
