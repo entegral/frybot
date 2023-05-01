@@ -39,8 +39,12 @@ var promptCmd = &cobra.Command{
 		}
 		color.Yellow("using modelInput: %s", modelInput)
 		color.Yellow("using model: %s", string(model))
-		color.Yellow("using targetFile: %s", targetFile)
-		color.Blue("Prompt %s", prompt)
+		color.Blue("Prompt: %s", prompt)
+		if targetFile != "" {
+			color.Yellow("using targetFile as context: %s", targetFile)
+		} else {
+			color.Yellow("using files in working directory as context")
+		}
 
 		if targetFile != "" {
 			workingDir, err := os.Getwd()
