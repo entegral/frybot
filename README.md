@@ -49,8 +49,10 @@ To use Frybot, you will need to have an OpenAI API key. You can sign up for an A
 
 The `chat` command initializes a chat session with the bot. Type `exit` to exit or press `crtl + c`. You may also say `save this conversation` to save the conversation to a file named `frybot_conversation.txt` in your `cwd`.
 
-```bash
+```sh
+
 frybot chat
+
 ```
 
 ### Prompt
