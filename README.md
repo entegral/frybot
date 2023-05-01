@@ -1,6 +1,3 @@
-Prompt: please only respond with file contents: can you please provide a detailed README, written in markdown, for the code i have provided?
-
-Response:
 # Frybot
 
 Frybot is an AI language model that can assist users with answering questions about code in their current working directory (`cwd`). The `cwd` may be a combination of more than one file, but must not exceed the token length for the model you have selected. 
