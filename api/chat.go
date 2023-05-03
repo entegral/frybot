@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/fatih/color"
 )
 
 // ChatMessage is a struct that represents a message in the OpenAI Chat API
@@ -16,6 +18,24 @@ type ChatMessage struct {
 
 // ChatThread is a slice of ChatMessages with special helper functions
 type ChatThread []ChatMessage
+
+// MarshalJSON is a function that marshals the ChatThread into json
+func (ct *ChatThread) MarshalJSON() ([]byte, error) {
+	chatThreadJSON, err := json.Marshal(ct)
+	if err != nil {
+		color.Red("Error archiving conversation: %s", err)
+		return nil, err
+	}
+	return chatThreadJSON, nil
+}
+
+// UnmarshalJSON is a function that unmarshals the ChatThread from json
+func (ct *ChatThread) UnmarshalJSON(byteData []byte) {
+	err := json.Unmarshal(byteData, &ct)
+	if err != nil {
+		color.Red("Error recovering conversation: %s", err)
+	}
+}
 
 func (ct ChatThread) String() string {
 	var str string

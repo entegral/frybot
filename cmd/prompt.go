@@ -40,13 +40,9 @@ var promptCmd = &cobra.Command{
 		color.Yellow("using modelInput: %s", modelInput)
 		color.Yellow("using model: %s", string(model))
 		color.Blue("Prompt: %s", prompt)
-		if targetFile != "" {
-			color.Yellow("using targetFile as context: %s", targetFile)
-		} else {
-			color.Yellow("using files in working directory as context")
-		}
 
 		if targetFile != "" {
+			color.Yellow("using targetFile as context: %s", targetFile)
 			workingDir, err := os.Getwd()
 			if err != nil {
 				color.Red("could not get working directory")
@@ -56,6 +52,7 @@ var promptCmd = &cobra.Command{
 			PromptAboutFile(prompt, model, targetFile)
 			return
 		}
+		color.Yellow("using files in working directory as context")
 		PromptAboutWorkingDirectory(prompt, model)
 	},
 }
@@ -65,12 +62,14 @@ var prompt string
 var modelInput string
 var model frybot.Models
 var saveOutput bool
+var filename string
 
 // AddParent initializes the command and adds it as a parent to the root command of this directory
 func AddParent(parent *cobra.Command) {
 	promptCmd.PersistentFlags().StringVarP(&targetFile, "targetFile", "t", "", "(optional) add a file to provide context to the prompt")
 	promptCmd.PersistentFlags().StringVarP(&prompt, "prompt", "p", "", "(required) prompt for the bot to answer")
 	promptCmd.PersistentFlags().StringVarP(&modelInput, "model", "m", "", "(optional) model used for processing the prompt, default is gpt3.5")
-	promptCmd.PersistentFlags().BoolVarP(&saveOutput, "saveOutput", "s", false, "(optional) model used for processing the prompt, default is gpt3.5")
+	promptCmd.PersistentFlags().BoolVarP(&saveOutput, "saveOutput", "s", false, "(optional) save output to file, default is false")
+	promptCmd.PersistentFlags().StringVarP(&filename, "filename", "f", "", "(optional) filename to save output to, default is frybot_output.md")
 	parent.AddCommand(promptCmd)
 }

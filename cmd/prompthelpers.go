@@ -54,7 +54,10 @@ func PromptAboutWorkingDirectory(prompt string, model frybot.Models) {
 	color.Green(response.String())
 	outputWithHeader := fmt.Sprintf("Prompt: %s\n\nResponse:\n%s", prompt, response.String())
 	if saveOutput {
-		err := os.WriteFile("frybot_output.md", []byte(outputWithHeader), 0644)
+		if filename == "" {
+			filename = "frybot_output.md"
+		}
+		err := os.WriteFile(filename, []byte(outputWithHeader), 0644)
 		if err != nil {
 			logrus.Println("Error:", err)
 		}

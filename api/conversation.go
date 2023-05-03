@@ -9,33 +9,53 @@ import (
 	"github.com/fatih/color"
 )
 
-// StartConversation starts a conversation with the bot in the terminal
+func PromptForInput() (input string, breakLoop bool) {
+	color.Blue("Enter text: ")
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		breakLoop = true
+	}
+	return input, breakLoop
+}
+
+var reader = bufio.NewReader(os.Stdin)
+
+// StartConversation starts a conversation with the bot in a for loop
+// reading from stdin and sending the input to the OpenAI Chat API.
+//
+// The bot responds to the user's input with a response from the OpenAI Chat API
+// and an ongoing conversation is saved to a ChatThread so it can be provided
+// as context to the ongoing discussion.
+//
+// Commands:
+// - "save this conversation" saves the conversation to frybot_conversation.md
+// - "exit" exits the conversation
 // and saves the conversation to frybot_conversation.md when the user
 // types "save this conversation"
 func StartConversation() {
 	var chat = ChatThread{}
 
-	reader := bufio.NewReader(os.Stdin)
 	color.Yellow("Welcome to your frybot conversation!\n")
 	color.Yellow("Type 'save this conversation' to save the conversation to frybot_conversation.md\n")
 	color.Yellow("Type 'exit' to exit the conversation\n")
 
 	for {
-		color.Blue("Enter text: ")
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println("Error reading input:", err)
+		input, breakLoop := PromptForInput()
+		if breakLoop {
 			break
 		}
 
-		if strings.Contains(input, "save this conversation") {
-			color.Blue("Saving conversation to frybot_conversation.md")
-			err := os.WriteFile("frybot_conversation.md", []byte(chat.String()), 0644)
-			if err != nil {
-				color.Red("Error saving conversation: %s", err)
+		// frybot commands
+		if strings.Contains(strings.ToLower(input), "save this conversation") {
+			if input == "save this conversation\n" {
+				color.Blue("Saving conversation")
+				SaveConversation(input, &chat)
+				continue
 			}
-			continue
+			defer SaveConversation(input, &chat)
 		} else if input == "exit\n" {
+			SaveConversation(input, &chat)
 			color.Blue("Exiting conversation")
 			break
 		}
