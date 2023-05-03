@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
+	"strings"
 
 	frybot "github.com/entegral/frybot/api"
 	"github.com/fatih/color"
@@ -23,6 +25,25 @@ func PromptAboutFile(prompt string, model frybot.Models, filePath string) {
 	color.Green(response.String())
 }
 
+func IsIgnorableFile(file fs.DirEntry) bool {
+	if file.IsDir() {
+		return true
+	}
+	if file.Name() == "frybot_conversation.md" || file.Name() == "frybot_dump.md" {
+		return true
+	}
+	if file.Name() == ".git" || file.Name() == ".gitignore" {
+		return true
+	}
+	if file.Name() == "go.mod" || file.Name() == "go.sum" {
+		return true
+	}
+	if strings.Contains(file.Name(), ".png") || strings.Contains(file.Name(), ".jpg") {
+		return true
+	}
+	return false
+}
+
 // PromptAboutWorkingDirectory prompts the bot about the working directory
 func PromptAboutWorkingDirectory(prompt string, model frybot.Models) {
 	workingDir, err := os.Getwd()
@@ -34,7 +55,7 @@ func PromptAboutWorkingDirectory(prompt string, model frybot.Models) {
 	// use directory contents to parse and combine all files into a single prompt
 	var combinedData string
 	for _, file := range data {
-		if file.IsDir() {
+		if IsIgnorableFile(file) {
 			continue
 		}
 		fileData, err := os.ReadFile(file.Name())
@@ -50,7 +71,7 @@ func PromptAboutWorkingDirectory(prompt string, model frybot.Models) {
 		logrus.Println("Error:", err)
 		return
 	}
-	fmt.Printf("\n")
+	fmt.Printf("\n: %v", combinedData)
 	color.Green(response.String())
 	outputWithHeader := fmt.Sprintf("Prompt: %s\n\nResponse:\n%s", prompt, response.String())
 	if saveOutput {
