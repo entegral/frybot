@@ -72,8 +72,3 @@ func init() {
 	promptCmd.Flags().StringVarP(&filename, "filename", "f", "", "(optional) filename to save output to, default is frybot_output.md")
 	rootCmd.AddCommand(promptCmd)
 }
-
-// AddParent initializes the command and adds it as a parent to the root command of this directory
-func AddParent(parent *cobra.Command) {
-	parent.AddCommand(promptCmd)
-}
