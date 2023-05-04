@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/fs"
 	"os"
@@ -23,7 +22,11 @@ func PromptAboutFile(prompt string, model frybot.Models, filePath string) {
 		return
 	}
 	fmt.Printf("\n")
-	color.Green(response.String())
+	respString := response.String()
+	if respString == "No choices returned" {
+		response.LogAPIResponse()
+	}
+	color.Green(respString)
 }
 
 func IsIgnorableFile(file fs.DirEntry) bool {
@@ -72,9 +75,10 @@ func PromptAboutWorkingDirectory(prompt string, model frybot.Models) {
 		logrus.Println("Error:", err)
 		return
 	}
-	out, _ := json.MarshalIndent(response, "", "  ")
-	fmt.Printf("\n: %s", string(out))
 	color.Green(response.String())
+	if response.String() == "No choices returned" {
+		response.LogAPIResponse()
+	}
 	outputWithHeader := fmt.Sprintf("Prompt: %s\n\nResponse:\n%s", prompt, response.String())
 	if saveOutput {
 		if filename == "" {

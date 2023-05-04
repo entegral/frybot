@@ -85,9 +85,8 @@ func Complete(cr CompletionRequest) (CompletionResponse, error) {
 		return CompletionResponse{}, err
 	}
 	if len(completionResponse.Choices) == 0 {
-		logrus.Println("No choices returned")
+		logrus.Println("No choices returned:", completionResponse)
 		return completionResponse, nil
 	}
-	logrus.Println(completionResponse.Choices[0].Text)
 	return completionResponse, nil
 }

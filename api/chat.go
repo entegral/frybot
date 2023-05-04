@@ -119,6 +119,12 @@ type ChatResponse struct {
 	} `json:"usage"`
 }
 
+// LogAPIResponse is a function that logs the entire API response
+func (cr ChatResponse) LogAPIResponse() {
+	out, _ := json.MarshalIndent(cr, "", "  ")
+	color.Yellow("APIResponse: %s", string(out))
+}
+
 // String is a function that returns the text of the first ChatChoice
 // if an error occurs, it returns the error
 func (cr ChatResponse) String() string {
