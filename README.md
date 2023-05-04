@@ -66,8 +66,8 @@ You may also save the response to a file with the `-s` flag. This will save the 
 
 ```sh
 
-frybot prompt -p "How do I find a User record using platformservices?" -t "path/to/file"
+frybot prompt "How do I find a User record using platformservices?" -t "relative/path/to/file"
 
 ```
 
-The `-p` flag is required and specifies the prompt for the bot to answer. The `-t` flag is optional and specifies the file to provide context to the prompt.
+The `-t` flag is optional and specifies the file to provide context to the prompt.
