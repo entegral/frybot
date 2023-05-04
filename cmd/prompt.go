@@ -70,5 +70,5 @@ func init() {
 	promptCmd.Flags().StringVarP(&modelInput, "model", "m", "", "(optional) model used for processing the prompt, default is gpt3.5")
 	promptCmd.Flags().BoolVarP(&saveOutput, "saveOutput", "s", false, "(optional) save output to file, default is false")
 	promptCmd.Flags().StringVarP(&filename, "filename", "f", "", "(optional) filename to save output to, default is frybot_output.md")
-	rootCmd.AddCommand(promptCmd)
+	RootCmd.AddCommand(promptCmd)
 }

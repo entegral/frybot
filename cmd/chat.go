@@ -21,7 +21,7 @@ var chatCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(chatCmd)
+	RootCmd.AddCommand(chatCmd)
 
 	// Here you will define your flags and configuration settings.
 
