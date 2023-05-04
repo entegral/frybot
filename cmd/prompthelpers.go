@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"os"
@@ -71,7 +72,8 @@ func PromptAboutWorkingDirectory(prompt string, model frybot.Models) {
 		logrus.Println("Error:", err)
 		return
 	}
-	fmt.Printf("\n: %v", combinedData)
+	out, _ := json.MarshalIndent(response, "", "  ")
+	fmt.Printf("\n: %s", string(out))
 	color.Green(response.String())
 	outputWithHeader := fmt.Sprintf("Prompt: %s\n\nResponse:\n%s", prompt, response.String())
 	if saveOutput {
