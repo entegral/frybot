@@ -64,12 +64,16 @@ var model frybot.Models
 var saveOutput bool
 var filename string
 
-// AddParent initializes the command and adds it as a parent to the root command of this directory
-func AddParent(parent *cobra.Command) {
+func init() {
 	promptCmd.Flags().StringVarP(&targetFile, "targetFile", "t", "", "(optional) add a file to provide context to the prompt")
 	promptCmd.Flags().StringVarP(&prompt, "prompt", "p", "", "(required) prompt for the bot to answer")
 	promptCmd.Flags().StringVarP(&modelInput, "model", "m", "", "(optional) model used for processing the prompt, default is gpt3.5")
 	promptCmd.Flags().BoolVarP(&saveOutput, "saveOutput", "s", false, "(optional) save output to file, default is false")
 	promptCmd.Flags().StringVarP(&filename, "filename", "f", "", "(optional) filename to save output to, default is frybot_output.md")
+	rootCmd.AddCommand(promptCmd)
+}
+
+// AddParent initializes the command and adds it as a parent to the root command of this directory
+func AddParent(parent *cobra.Command) {
 	parent.AddCommand(promptCmd)
 }

@@ -35,9 +35,12 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.fry.yaml)")
 
-	AddParent(rootCmd)
-
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+// AddFrybotCommand binds the frybot root command to the parent command. Use this to integrate this package into your own CLI.
+func AddFrybotCommand(parent *cobra.Command) {
+	parent.AddCommand(rootCmd)
 }
