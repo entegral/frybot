@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"os"
+	"strings"
 
 	frybot "github.com/entegral/frybot/api"
 	"github.com/fatih/color"
@@ -41,15 +41,24 @@ var promptCmd = &cobra.Command{
 		color.Yellow("using model: %s", string(model))
 		color.Blue("Prompt: %s", prompt)
 
-		if targetFile != "" {
-			color.Yellow("using targetFile as context: %s", targetFile)
-			workingDir, err := os.Getwd()
-			if err != nil {
-				color.Red("could not get working directory")
-				return
+		if targetFiles != "" {
+			// workingDir, err := os.Getwd()
+			// if err != nil {
+			// 	color.Red("could not get working directory")
+			// 	return
+			// }
+			filenames := strings.Split(targetFiles, ",")
+			filePaths := []string{}
+			for _, filename := range filenames {
+				matchingFilesInCWD, err := FindMatchingFiles(filename)
+				if err != nil {
+					color.Red("could not find matching files in working directory:", filename)
+					continue
+				}
+				filePaths = append(filePaths, matchingFilesInCWD...)
 			}
-			targetFile = workingDir + "/" + targetFile
-			PromptAboutFile(prompt, model, targetFile)
+
+			PromptAboutFile(prompt, model, filePaths)
 			return
 		}
 		color.Yellow("using files in working directory as context")
@@ -57,7 +66,7 @@ var promptCmd = &cobra.Command{
 	},
 }
 
-var targetFile string
+var targetFiles string
 var prompt string
 var modelInput string
 var model frybot.Models
@@ -66,7 +75,7 @@ var filename string
 
 func init() {
 	promptCmd.Flags().StringVarP(&prompt, "prompt", "p", "", "(required) prompt for the bot to answer")
-	promptCmd.Flags().StringVarP(&targetFile, "targetFile", "t", "", "(optional) add a file to provide context to the prompt")
+	promptCmd.Flags().StringVarP(&targetFiles, "targetFiles", "t", "", "(optional) add a file to provide context to the prompt")
 	promptCmd.Flags().StringVarP(&modelInput, "model", "m", "", "(optional) model used for processing the prompt, default is gpt3.5")
 	promptCmd.Flags().BoolVarP(&saveOutput, "saveOutput", "s", false, "(optional) save output to file, default is false")
 	promptCmd.Flags().StringVarP(&filename, "filename", "f", "", "(optional) filename to save output to, default is frybot_output.md")

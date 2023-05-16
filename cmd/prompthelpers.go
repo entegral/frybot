@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path/filepath"
 	"strings"
 
 	frybot "github.com/entegral/frybot/api"
@@ -11,12 +12,40 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// PromptAboutFile prompts the bot about a file
-func PromptAboutFile(prompt string, model frybot.Models, filePath string) {
+func FindMatchingFiles(pattern string) ([]string, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("dude, can't get the current working directory: %v", err)
+	}
 
-	data, _ := os.ReadFile(filePath)
-	// input := "a cyborg version of fry from futurama"
-	response, err := frybot.AnalyzeCode(model, prompt, string(data), 0.3)
+	files, err := filepath.Glob(filepath.Join(cwd, pattern))
+	if err != nil {
+		return nil, fmt.Errorf("man, there's something wrong with the pattern: %v", err)
+	}
+
+	var matchingFiles []string
+	for _, file := range files {
+		if !strings.Contains(file, "*") {
+			matchingFiles = append(matchingFiles, file)
+		}
+	}
+	color.Yellow("using targetFiles as context: %v", matchingFiles)
+	return matchingFiles, nil
+}
+
+// PromptAboutFile prompts the bot about a file
+func PromptAboutFile(prompt string, model frybot.Models, filePaths []string) {
+	context := ""
+	for _, filePath := range filePaths {
+		data, _ := os.ReadFile(filePath)
+
+		// input := "a cyborg version of fry from futurama"
+		if context != "" {
+			context += "\n"
+		}
+		context += "$!FILENAME=" + filePath + "\n" + string(data) + "\nEOF\n"
+	}
+	response, err := frybot.AnalyzeCode(model, prompt, context, 0.3)
 	if err != nil {
 		logrus.Println("Error:", err)
 		return
