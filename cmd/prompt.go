@@ -75,7 +75,7 @@ var filename string
 
 func init() {
 	promptCmd.Flags().StringVarP(&prompt, "prompt", "p", "", "(required) prompt for the bot to answer")
-	promptCmd.Flags().StringVarP(&targetFiles, "targetFiles", "t", "", "(optional) add a file to provide context to the prompt")
+	promptCmd.Flags().StringVarP(&targetFiles, "targetFiles", "t", "", "(optional) specify a glob pattern to add file(s) to provide context to the prompt")
 	promptCmd.Flags().StringVarP(&modelInput, "model", "m", "", "(optional) model used for processing the prompt, default is gpt3.5")
 	promptCmd.Flags().BoolVarP(&saveOutput, "saveOutput", "s", false, "(optional) save output to file, default is false")
 	promptCmd.Flags().StringVarP(&filename, "filename", "f", "", "(optional) filename to save output to, default is frybot_output.md")

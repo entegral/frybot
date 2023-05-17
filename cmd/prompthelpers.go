@@ -29,7 +29,10 @@ func FindMatchingFiles(pattern string) ([]string, error) {
 			matchingFiles = append(matchingFiles, file)
 		}
 	}
-	color.Yellow("using targetFiles as context: %v", matchingFiles)
+	color.Yellow("using targetFiles as context:")
+	for _, file := range matchingFiles {
+		color.Yellow(strings.Replace(file, cwd, " - .", 1))
+	}
 	return matchingFiles, nil
 }
 
