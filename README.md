@@ -1,6 +1,6 @@
 # Frybot
 
-Frybot is an AI language model that can assist users with answering questions about code in their current working directory (`cwd`). The `cwd` may be a combination of more than one file, but must not exceed the token length for the model you have selected. 
+Frybot is an OpenAI client that can assist users with answering questions about files in their current working directory (`cwd`). The `cwd` may be a combination of more than one file, but must not exceed the token length for the model you have selected. 
 
 `Prompt` - loads the `cwd` into the model and allows you to ask questions about the code. 
 
