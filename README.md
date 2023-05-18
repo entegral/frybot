@@ -66,7 +66,7 @@ You may also save the response to a file with the `-s` flag. This will save the 
 
 ```sh
 
-frybot prompt "How do I find a User record using platformservices?" -t "relative/path/to/file"
+frybot prompt "How do I find a User record in this database?" -t "relative/path/to/file"
 
 ```
 
